@@ -1,0 +1,39 @@
+{
+	"name": "@seu-imovel-aqui/predial-primus-plugin",
+	"version": "1.0.0",
+	"description": "Plugin for Predial Primus realState scraping",
+   "main": "dist/index.js",
+   "types": "dist/index.d.ts",
+	"dependencies": {
+		"@seu-imovel-aqui/plugin": "^1.0.2",
+		"@seu-imovel-aqui/plugin-types": "^1.0.4",
+		"@types/node": "^16.11.0",
+		"apify": "^2.0.7",
+		"apify-cli": "^0.6.2",
+		"puppeteer": "*",
+		"rimraf": "^3.0.2"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.3.1",
+		"@typescript-eslint/parser": "^5.3.1",
+		"eslint": "^7.32.0",
+		"ts-node": "^10.3.0",
+		"typescript": "^4.4.4"
+	},
+	"scripts": {
+		"start": "ts-node src/index.ts",
+		"scraping": "rimraf apify_storage && apify run",
+      "build": "rimraf dist && tsc"
+	},
+	"realState": {
+		"name": "Predial Primus",
+		"className": "PredialPrimusPlugin",
+		"link": "https://www.predialprimus.com.br/",
+		"image": "https://www.predialprimus.com.br/images/logo.png"
+	},
+	"author": {
+		"name": "Everton Silva",
+		"url": "https://github.com/evertonlok"
+	},
+	"license": "ISC"
+}

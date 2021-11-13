@@ -1,0 +1,9 @@
+{
+	"name": "teste",
+	"version": "0.0",
+	"buildTag": "latest",
+	"env": {
+        "APIFY_CHROME_EXECUTABLE_PATH": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+    },
+	"template": "project_puppeteer_crawler"
+}
