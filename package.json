@@ -23,7 +23,8 @@
 	"scripts": {
 		"start": "ts-node src/index.ts",
 		"scraping": "rimraf apify_storage && apify run",
-      "build": "rimraf dist && tsc"
+      "build": "rimraf dist && tsc",
+      "fix": "eslint src/** --fix"
 	},
 	"realState": {
 		"name": "Predial Primus",

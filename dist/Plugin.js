@@ -26,11 +26,11 @@ class PredialPrimusPlugin {
             apify_1.default.main(() => __awaiter(this, void 0, void 0, function* () {
                 const queue = yield apify_1.default.openRequestQueue();
                 queue.addRequest({
-                    url: constants_1.SELL_URL.replace('{{page}}', '1'),
+                    url: constants_1.SELL_URL.replace("{{page}}", "1"),
                     userData: { typeAd: plugin_types_1.TypeAd.BUY }
                 });
                 queue.addRequest({
-                    url: constants_1.RENT_URL.replace('{{page}}', '1'),
+                    url: constants_1.RENT_URL.replace("{{page}}", "1"),
                     userData: { typeAd: plugin_types_1.TypeAd.RENT }
                 });
                 const crawler = new apify_1.default.PuppeteerCrawler({
@@ -61,8 +61,3 @@ class PredialPrimusPlugin {
     }
 }
 exports.PredialPrimusPlugin = PredialPrimusPlugin;
-const plugin = new PredialPrimusPlugin();
-plugin.executeScraping().then((data) => {
-    console.log('dados', data);
-    console.log('QTDF', data.length);
-});

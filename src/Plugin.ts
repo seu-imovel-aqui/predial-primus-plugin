@@ -1,8 +1,8 @@
-import Apify from 'apify';
-import { handlePagination, handleDetail, handlePage } from './routes';
-import { PAGE_TYPE, RENT_URL, SELL_URL } from './constants';
-import { Plugin } from '@seu-imovel-aqui/plugin';
-import { Ad, TypeAd } from '@seu-imovel-aqui/plugin-types';
+import Apify from "apify";
+import{ handlePagination, handleDetail, handlePage } from"./routes";
+import{ PAGE_TYPE, RENT_URL, SELL_URL } from"./constants";
+import{ Plugin } from"@seu-imovel-aqui/plugin";
+import{ Ad, TypeAd } from"@seu-imovel-aqui/plugin-types";
 
 export class PredialPrimusPlugin implements Plugin {
    private stackData: Ad[] = [];
@@ -13,14 +13,14 @@ export class PredialPrimusPlugin implements Plugin {
             const queue = await Apify.openRequestQueue();
 
             queue.addRequest({
-               url: SELL_URL.replace('{{page}}', '1'),
+               url: SELL_URL.replace("{{page}}", "1"),
                userData: { typeAd: TypeAd.BUY }
             });
 
             queue.addRequest({
-               url: RENT_URL.replace('{{page}}', '1'),
+               url: RENT_URL.replace("{{page}}", "1"),
                userData: { typeAd: TypeAd.RENT }
-            })
+            });
 
             const crawler = new Apify.PuppeteerCrawler({
                requestQueue: queue,
@@ -34,12 +34,12 @@ export class PredialPrimusPlugin implements Plugin {
                handlePageFunction: async (context) => {
                   const label: PAGE_TYPE = context.request.userData.label || PAGE_TYPE.PAGINATION;
                   switch(label) {
-                     case PAGE_TYPE.PAGINATION: return handlePagination(queue, context)
+                     case PAGE_TYPE.PAGINATION: return handlePagination(queue, context);
                      case PAGE_TYPE.DETAIL:
                         return handleDetail(context).then((ad: Ad) => {
                            this.stackData.push(ad);
                         });
-                     default: return handlePage(context)
+                     default: return handlePage(context);
                   }
                },
             });
@@ -50,12 +50,3 @@ export class PredialPrimusPlugin implements Plugin {
       });
    }
 }
-
-const plugin = new PredialPrimusPlugin();
-
-plugin.executeScraping().then((data) => {
-   console.log('dados', data)
-   console.log('QTDF', data.length)
-})
-
-

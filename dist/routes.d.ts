@@ -1,6 +1,6 @@
-import { Request, RequestQueue } from 'apify';
-import { Page } from 'puppeteer';
-import { Ad } from '@seu-imovel-aqui/plugin-types';
+import { Request, RequestQueue } from "apify";
+import { Page } from "puppeteer";
+import { Ad } from "@seu-imovel-aqui/plugin-types";
 export declare const handlePagination: (queue: RequestQueue, { request, page }: {
     request: Request;
     page: Page;

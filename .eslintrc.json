@@ -18,6 +18,25 @@
     "rules": {
        "@typescript-eslint/no-explicit-any": "off",
        "@typescript-eslint/no-extra-parens": "error",
-       "@typescript-eslint/indent": ["error", 3]
+       "@typescript-eslint/indent": ["error", 3],
+       "@typescript-eslint/type-annotation-spacing": "error",
+       "comma-spacing": "error",
+       "array-bracket-spacing": ["error", "always"],
+       "object-curly-spacing": ["error", "always"],
+       "space-unary-ops": "error",
+       "no-spaced-func": "error",
+       "camelcase": "error",
+       "curly": "error",
+       "no-array-constructor": "error",
+       "prefer-const": "error",
+       "block-spacing": "error",
+       "spaced-comment": ["error", "always"],
+       "no-multi-spaces": "error",
+       "no-whitespace-before-property": "error",
+       "space-before-blocks": "error",
+       "arrow-spacing": "error",
+       "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+       "semi": ["error", "always"],
+       "quotes": ["error", "double"]
     }
 }

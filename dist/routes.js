@@ -15,15 +15,15 @@ const constants_1 = require("./constants");
 const plugin_types_1 = require("@seu-imovel-aqui/plugin-types");
 const SELECTORS = {
     LINKS: "div > a[href^='/imovel']",
-    TITLE: 'div.MuiContainer-root.MuiContainer-maxWidthLg > h6',
-    DESCRIPTION: 'div > p.MuiTypography-root.MuiTypography-body1',
-    PRICE: 'div > h6.MuiTypography-root.MuiTypography-h6.MuiTypography-alignRight',
-    CITY_NEIGHBORHOOD: 'p.MuiTypography-root.MuiTypography-body2',
-    IPTU_COND: 'div > p.MuiTypography-root.MuiTypography-body1.MuiTypography-colorTextSecondary.MuiTypography-alignRight',
-    DETAILS: 'div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.MuiGrid-align-items-xs-center.MuiGrid-justify-xs-space-evenly',
-    DETAILS_INNER: 'div.MuiGrid-container > div.MuiGrid-root.MuiGrid-item > p',
-    PROPERTY_ITEMS: 'p.MuiTypography-root.MuiTypography-subtitle2.MuiTypography-colorSecondary.MuiTypography-paragraph + div > .MuiGrid-item',
-    IMAGE: 'span.image-gallery-thumbnail-inner > img.image-gallery-thumbnail-image'
+    TITLE: "div.MuiContainer-root.MuiContainer-maxWidthLg > h6",
+    DESCRIPTION: "div > p.MuiTypography-root.MuiTypography-body1",
+    PRICE: "div > h6.MuiTypography-root.MuiTypography-h6.MuiTypography-alignRight",
+    CITY_NEIGHBORHOOD: "p.MuiTypography-root.MuiTypography-body2",
+    IPTU_COND: "div > p.MuiTypography-root.MuiTypography-body1.MuiTypography-colorTextSecondary.MuiTypography-alignRight",
+    DETAILS: "div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.MuiGrid-align-items-xs-center.MuiGrid-justify-xs-space-evenly",
+    DETAILS_INNER: "div.MuiGrid-container > div.MuiGrid-root.MuiGrid-item > p",
+    PROPERTY_ITEMS: "p.MuiTypography-root.MuiTypography-subtitle2.MuiTypography-colorSecondary.MuiTypography-paragraph + div > .MuiGrid-item",
+    IMAGE: "span.image-gallery-thumbnail-inner > img.image-gallery-thumbnail-image"
 };
 const handlePagination = (queue, { request, page }) => __awaiter(void 0, void 0, void 0, function* () {
     const nextPage = (request.userData.page || 1) + 1;
@@ -55,7 +55,7 @@ const handlePagination = (queue, { request, page }) => __awaiter(void 0, void 0,
         queue.addRequest({
             url: (request.userData.typeAd === plugin_types_1.TypeAd.BUY
                 ? constants_1.SELL_URL
-                : constants_1.RENT_URL).replace('{{page}}', nextPage.toString()),
+                : constants_1.RENT_URL).replace("{{page}}", nextPage.toString()),
             userData: Object.assign(Object.assign({}, request.userData), { page: nextPage })
         });
     }
@@ -64,7 +64,7 @@ exports.handlePagination = handlePagination;
 const handleDetail = ({ request, page }) => __awaiter(void 0, void 0, void 0, function* () {
     const link = page.url();
     const type = (yield page.$eval(SELECTORS.TITLE, element => element.textContent.trim()))
-        .replace(/^(.*?)\s.*/, '$1')
+        .replace(/^(.*?)\s.*/, "$1")
         .trim();
     const typeAd = request.userData.typeAd;
     const description = yield page.$eval(SELECTORS.DESCRIPTION, (element) => element.textContent);
@@ -77,15 +77,15 @@ const handleDetail = ({ request, page }) => __awaiter(void 0, void 0, void 0, fu
         .then(() => __awaiter(void 0, void 0, void 0, function* () {
         images.push(...yield page.$$eval(SELECTORS.IMAGE, (elements) => elements.map((element) => {
             return {
-                alt: 'description',
+                alt: "description",
                 link: element.src
             };
         })));
     }))
         .catch(() => {
         images.push({
-            alt: 'not found',
-            link: 'not found'
+            alt: "not found",
+            link: "not found"
         });
     });
     const ad = {
@@ -109,20 +109,20 @@ const getCharacteristics = (page) => __awaiter(void 0, void 0, void 0, function*
         const [condominiumElement, IPTUEelement] = elements.slice(0, 2);
         return [
             {
-                name: 'condominium',
+                name: "condominium",
                 value: condominiumElement.textContent
             },
             {
-                name: 'iptu',
+                name: "iptu",
                 value: IPTUEelement.textContent
             }
         ];
     }));
     characteristics.push(...yield page.$eval(SELECTORS.DETAILS, (element, selectors) => Array.from(element.querySelectorAll(selectors.DETAILS_INNER))
         .map((element) => {
-        const [value, ...key] = element.textContent.split(' ');
+        const [value, ...key] = element.textContent.split(" ");
         return {
-            name: key.join(' '),
+            name: key.join(" "),
             value
         };
     }), SELECTORS));
@@ -135,6 +135,6 @@ const getCharacteristics = (page) => __awaiter(void 0, void 0, void 0, function*
     return characteristics;
 });
 const handlePage = ({ request, page }) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('DEFAULT', request.url);
+    console.log("DEFAULT", request.url);
 });
 exports.handlePage = handlePage;

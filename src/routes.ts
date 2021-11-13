@@ -1,23 +1,23 @@
-import { Request, RequestQueue } from 'apify';
-import  { sleep } from 'apify/build/utils';
-import { Page } from 'puppeteer';
-import  { PAGE_TYPE, RENT_URL, SELL_URL } from './constants';
-import { Ad, Address, Characteristic, Property, PropertyImage, State, TypeAd } from '@seu-imovel-aqui/plugin-types'
+import { Request, RequestQueue } from "apify";
+import { sleep } from "apify/build/utils";
+import { Page } from "puppeteer";
+import { PAGE_TYPE, RENT_URL, SELL_URL } from "./constants";
+import { Ad, Address, Characteristic, Property, PropertyImage, State, TypeAd } from "@seu-imovel-aqui/plugin-types";
 
 const SELECTORS = {
    LINKS: "div > a[href^='/imovel']",
-   TITLE: 'div.MuiContainer-root.MuiContainer-maxWidthLg > h6',
-   DESCRIPTION: 'div > p.MuiTypography-root.MuiTypography-body1',
-   PRICE: 'div > h6.MuiTypography-root.MuiTypography-h6.MuiTypography-alignRight',
-   CITY_NEIGHBORHOOD: 'p.MuiTypography-root.MuiTypography-body2',
-   IPTU_COND: 'div > p.MuiTypography-root.MuiTypography-body1.MuiTypography-colorTextSecondary.MuiTypography-alignRight',
-   DETAILS: 'div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.MuiGrid-align-items-xs-center.MuiGrid-justify-xs-space-evenly',
-   DETAILS_INNER: 'div.MuiGrid-container > div.MuiGrid-root.MuiGrid-item > p',
-   PROPERTY_ITEMS: 'p.MuiTypography-root.MuiTypography-subtitle2.MuiTypography-colorSecondary.MuiTypography-paragraph + div > .MuiGrid-item',
-   IMAGE: 'span.image-gallery-thumbnail-inner > img.image-gallery-thumbnail-image'
+   TITLE: "div.MuiContainer-root.MuiContainer-maxWidthLg > h6",
+   DESCRIPTION: "div > p.MuiTypography-root.MuiTypography-body1",
+   PRICE: "div > h6.MuiTypography-root.MuiTypography-h6.MuiTypography-alignRight",
+   CITY_NEIGHBORHOOD: "p.MuiTypography-root.MuiTypography-body2",
+   IPTU_COND: "div > p.MuiTypography-root.MuiTypography-body1.MuiTypography-colorTextSecondary.MuiTypography-alignRight",
+   DETAILS: "div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.MuiGrid-align-items-xs-center.MuiGrid-justify-xs-space-evenly",
+   DETAILS_INNER: "div.MuiGrid-container > div.MuiGrid-root.MuiGrid-item > p",
+   PROPERTY_ITEMS: "p.MuiTypography-root.MuiTypography-subtitle2.MuiTypography-colorSecondary.MuiTypography-paragraph + div > .MuiGrid-item",
+   IMAGE: "span.image-gallery-thumbnail-inner > img.image-gallery-thumbnail-image"
 };
 
-export const handlePagination = async (queue: RequestQueue, { request, page } : { request: Request, page: Page } ) => {
+export const handlePagination = async (queue: RequestQueue, { request, page }: { request: Request, page: Page } ) => {
    const nextPage: number = (request.userData.page || 1) + 1;
    const links = await page.$$eval<{ url: string, payload: { partialAddress: { city: string, neighborhood: string } } }[]>(
       SELECTORS.LINKS,
@@ -37,10 +37,10 @@ export const handlePagination = async (queue: RequestQueue, { request, page } : 
                      neighborhood
                   }
                }
-            }
+            };
          }), SELECTORS);
 
-   for(const { url, payload } of links) {
+   for (const { url, payload } of links) {
       await sleep(3000);
       queue.addRequest({
          url,
@@ -54,25 +54,25 @@ export const handlePagination = async (queue: RequestQueue, { request, page } : 
 
    const hasNextPage = await page.$$eval<boolean>(`button[aria-label*='page ${ nextPage }']`, button => !!button.length);
 
-   if(hasNextPage) {
+   if (hasNextPage) {
       queue.addRequest({
          url: (
             request.userData.typeAd === TypeAd.BUY
                ? SELL_URL
                : RENT_URL
-         ).replace('{{page}}', nextPage.toString()),
+         ).replace("{{page}}", nextPage.toString()),
          userData: {
             ...request.userData,
             page: nextPage
          }
       });
    }
-}
+};
 
-export const handleDetail = async ({ request, page }: { request: Request, page: Page }) =>{
+export const handleDetail = async ({ request, page }: { request: Request, page: Page }) => {
    const link: string = page.url();
    const type: string = (await page.$eval<string>(SELECTORS.TITLE, element => element.textContent.trim()))
-      .replace(/^(.*?)\s.*/, '$1')
+      .replace(/^(.*?)\s.*/, "$1")
       .trim();
    const typeAd: TypeAd = request.userData.typeAd;
    const description: string = await page.$eval<string>(SELECTORS.DESCRIPTION, (element: Element) => element.textContent);
@@ -88,7 +88,7 @@ export const handleDetail = async ({ request, page }: { request: Request, page: 
             SELECTORS.IMAGE,
             (elements: Element[]) => elements.map((element: Element) => {
                return {
-                  alt: 'description',
+                  alt: "description",
                   link: (element as HTMLImageElement).src
                } as PropertyImage;
             })
@@ -96,8 +96,8 @@ export const handleDetail = async ({ request, page }: { request: Request, page: 
       })
       .catch(() => {
          images.push({
-            alt: 'not found',
-            link: 'not found'
+            alt: "not found",
+            link: "not found"
          } as PropertyImage);
       });
 
@@ -112,10 +112,10 @@ export const handleDetail = async ({ request, page }: { request: Request, page: 
          type
       } as Property,
       typeAd
-   }
+   };
 
    return ad;
-}
+};
 
 const getCharacteristics = async (page: Page): Promise<Characteristic[]> => {
    const characteristics: Characteristic[] = [];
@@ -126,11 +126,11 @@ const getCharacteristics = async (page: Page): Promise<Characteristic[]> => {
          const [ condominiumElement, IPTUEelement ] = elements.slice(0, 2);
          return [
             {
-               name: 'condominium',
+               name: "condominium",
                value: condominiumElement.textContent
             } as Characteristic<string>,
             {
-               name: 'iptu',
+               name: "iptu",
                value: IPTUEelement.textContent
             } as Characteristic<string>
          ];
@@ -142,11 +142,11 @@ const getCharacteristics = async (page: Page): Promise<Characteristic[]> => {
       (element: Element, selectors: unknown) =>
          Array.from(element.querySelectorAll((selectors as Record<string, string>).DETAILS_INNER))
             .map((element: Element) => {
-               const [ value, ...key ]: string[] = element.textContent.split(' ');
+               const [ value, ...key ]: string[] = element.textContent.split(" ");
                return {
-                  name: key.join(' '),
+                  name: key.join(" "),
                   value
-               } as Characteristic<string>
+               } as Characteristic<string>;
             }), SELECTORS
    ));
 
@@ -157,13 +157,13 @@ const getCharacteristics = async (page: Page): Promise<Characteristic[]> => {
             return {
                name: element.textContent,
                value: 1
-            } as Characteristic<number>
+            } as Characteristic<number>;
          })
    ));
 
    return characteristics;
-}
+};
 
 export const handlePage = async ({ request, page }: { request: Request, page: Page }) => {
-   console.log('DEFAULT', request.url);
-}
+   console.log("DEFAULT", request.url);
+};
