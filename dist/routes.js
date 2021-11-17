@@ -68,7 +68,10 @@ const handleDetail = ({ request, page }) => __awaiter(void 0, void 0, void 0, fu
         .trim();
     const typeAd = request.userData.typeAd;
     const description = yield page.$eval(SELECTORS.DESCRIPTION, (element) => element.textContent);
-    const price = yield page.$eval(SELECTORS.PRICE, (element) => element.textContent);
+    const price = yield page.$eval(SELECTORS.PRICE, (element) => {
+        const value = element.textContent.replace(/[^0-9,]/g, "").replace(/,/g, ".");
+        return Number(value).toFixed(2);
+    });
     const images = [];
     const state = { name: "Rio de Janeiro", uf: "RJ" };
     const address = Object.assign(Object.assign({}, request.userData.payload.partialAddress), { state });
@@ -109,7 +112,7 @@ const getCharacteristics = (page) => __awaiter(void 0, void 0, void 0, function*
         const [condominiumElement, IPTUEelement] = elements.slice(0, 2);
         return [
             {
-                name: "condominium",
+                name: "Condomínio",
                 value: condominiumElement.textContent
             },
             {

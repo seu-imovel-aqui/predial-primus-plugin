@@ -23,7 +23,7 @@ class PredialPrimusPlugin {
     }
     executeScraping() {
         return new Promise((resolve, reject) => {
-            apify_1.default.main(() => __awaiter(this, void 0, void 0, function* () {
+            (() => __awaiter(this, void 0, void 0, function* () {
                 const queue = yield apify_1.default.openRequestQueue();
                 queue.addRequest({
                     url: constants_1.SELL_URL.replace("{{page}}", "1"),
@@ -56,8 +56,13 @@ class PredialPrimusPlugin {
                 });
                 yield crawler.run();
                 resolve(this.stackData);
-            }));
+            }))();
         });
     }
 }
 exports.PredialPrimusPlugin = PredialPrimusPlugin;
+// (async () => {
+//    const plugin = new PredialPrimusPlugin();
+//    const result = await plugin.executeScraping();
+//    console.log(result);
+// })();
