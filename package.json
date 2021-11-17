@@ -2,8 +2,8 @@
 	"name": "@seu-imovel-aqui/predial-primus-plugin",
 	"version": "1.0.0",
 	"description": "Plugin for Predial Primus realState scraping",
-   "main": "dist/index.js",
-   "types": "dist/index.d.ts",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"dependencies": {
 		"@seu-imovel-aqui/plugin": "^1.0.2",
 		"@seu-imovel-aqui/plugin-types": "^1.0.4",
@@ -21,10 +21,10 @@
 		"typescript": "^4.4.4"
 	},
 	"scripts": {
-		"start": "ts-node src/index.ts",
+		"start": "rimraf apify_storage && ts-node src/index.ts",
 		"scraping": "rimraf apify_storage && apify run",
-      "build": "rimraf dist && tsc",
-      "fix": "eslint src/** --fix"
+		"build": "rimraf dist && tsc",
+		"fix": "eslint src/** --fix"
 	},
 	"realState": {
 		"name": "Predial Primus",

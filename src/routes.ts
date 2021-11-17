@@ -40,7 +40,7 @@ export const handlePagination = async (queue: RequestQueue, { request, page }: {
             };
          }), SELECTORS);
 
-   for (const { url, payload } of links) {
+   for(const { url, payload } of links) {
       await sleep(3000);
       queue.addRequest({
          url,
@@ -76,7 +76,10 @@ export const handleDetail = async ({ request, page }: { request: Request, page: 
       .trim();
    const typeAd: TypeAd = request.userData.typeAd;
    const description: string = await page.$eval<string>(SELECTORS.DESCRIPTION, (element: Element) => element.textContent);
-   const price: string = await page.$eval<string>(SELECTORS.PRICE, (element: Element) => element.textContent);
+   const price: string = await page.$eval<string>(SELECTORS.PRICE, (element: Element) => {
+      const value: string = element.textContent.replace(/[^0-9,]/g, "").replace(/,/g, ".");
+      return Number(value).toFixed(2);
+   });
    const images: PropertyImage[] = [];
    const state: State = { name: "Rio de Janeiro", uf: "RJ" };
    const address: Address = { ...request.userData.payload.partialAddress, state };
@@ -126,7 +129,7 @@ const getCharacteristics = async (page: Page): Promise<Characteristic[]> => {
          const [ condominiumElement, IPTUEelement ] = elements.slice(0, 2);
          return [
             {
-               name: "condominium",
+               name: "Condomínio",
                value: condominiumElement.textContent
             } as Characteristic<string>,
             {

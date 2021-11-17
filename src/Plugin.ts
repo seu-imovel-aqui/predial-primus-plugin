@@ -1,15 +1,15 @@
 import Apify from "apify";
-import{ handlePagination, handleDetail, handlePage } from"./routes";
-import{ PAGE_TYPE, RENT_URL, SELL_URL } from"./constants";
-import{ Plugin } from"@seu-imovel-aqui/plugin";
-import{ Ad, TypeAd } from"@seu-imovel-aqui/plugin-types";
+import{ handlePagination, handleDetail, handlePage } from "./routes";
+import{ PAGE_TYPE, RENT_URL, SELL_URL } from "./constants";
+import{ Plugin } from "@seu-imovel-aqui/plugin";
+import{ Ad, TypeAd } from "@seu-imovel-aqui/plugin-types";
 
 export class PredialPrimusPlugin implements Plugin {
    private stackData: Ad[] = [];
 
    executeScraping() {
       return new Promise<Ad[]>((resolve, reject) => {
-         Apify.main(async () => {
+         (async () => {
             const queue = await Apify.openRequestQueue();
 
             queue.addRequest({
@@ -46,7 +46,14 @@ export class PredialPrimusPlugin implements Plugin {
 
             await crawler.run();
             resolve(this.stackData);
-         });
+         })();
       });
    }
 }
+
+// (async () => {
+//    const plugin = new PredialPrimusPlugin();
+//    const result = await plugin.executeScraping();
+//    console.log(result);
+// })();
+
