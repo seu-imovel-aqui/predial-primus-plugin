@@ -47,13 +47,7 @@ export class PredialPrimusPlugin implements Plugin {
 
             await crawler.run();
             await queue.drop();
-            rimraf("./apify_storage", (err: Error) => {
-               if(err) {
-                  console.log(err);
-               } else {
-                  console.log("apify_storage DELETED");
-               }
-            });
+            rimraf.sync("./apify_storage");
             resolve(this.stackData);
          })();
       });

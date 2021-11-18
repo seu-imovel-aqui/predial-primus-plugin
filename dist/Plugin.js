@@ -57,14 +57,7 @@ class PredialPrimusPlugin {
                 });
                 yield crawler.run();
                 yield queue.drop();
-                (0, rimraf_1.default)("./apify_storage", (err) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    else {
-                        console.log("apify_storage DELETED");
-                    }
-                });
+                rimraf_1.default.sync("./apify_storage");
                 resolve(this.stackData);
             }))();
         });
