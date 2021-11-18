@@ -17,6 +17,7 @@ const apify_1 = __importDefault(require("apify"));
 const routes_1 = require("./routes");
 const constants_1 = require("./constants");
 const plugin_types_1 = require("@seu-imovel-aqui/plugin-types");
+const rimraf_1 = __importDefault(require("rimraf"));
 class PredialPrimusPlugin {
     constructor() {
         this.stackData = [];
@@ -55,6 +56,15 @@ class PredialPrimusPlugin {
                     }),
                 });
                 yield crawler.run();
+                yield queue.drop();
+                (0, rimraf_1.default)("./apify_storage", (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        console.log("apify_storage DELETED");
+                    }
+                });
                 resolve(this.stackData);
             }))();
         });

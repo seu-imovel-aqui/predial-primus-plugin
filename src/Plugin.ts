@@ -3,6 +3,7 @@ import{ handlePagination, handleDetail, handlePage } from "./routes";
 import{ PAGE_TYPE, RENT_URL, SELL_URL } from "./constants";
 import{ Plugin } from "@seu-imovel-aqui/plugin";
 import{ Ad, TypeAd } from "@seu-imovel-aqui/plugin-types";
+import rimraf from "rimraf";
 
 export class PredialPrimusPlugin implements Plugin {
    private stackData: Ad[] = [];
@@ -45,6 +46,14 @@ export class PredialPrimusPlugin implements Plugin {
             });
 
             await crawler.run();
+            await queue.drop();
+            rimraf("./apify_storage", (err: Error) => {
+               if(err) {
+                  console.log(err);
+               } else {
+                  console.log("apify_storage DELETED");
+               }
+            });
             resolve(this.stackData);
          })();
       });
