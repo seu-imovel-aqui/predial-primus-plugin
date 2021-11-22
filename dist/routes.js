@@ -67,7 +67,10 @@ const handleDetail = ({ request, page }) => __awaiter(void 0, void 0, void 0, fu
         .replace(/^(.*?)\s.*/, "$1")
         .trim();
     const typeAd = request.userData.typeAd;
-    const description = yield page.$eval(SELECTORS.DESCRIPTION, (element) => element.textContent);
+    let description = yield page.$eval(SELECTORS.DESCRIPTION, (element) => element.textContent);
+    if (description.length === 0) {
+        description = yield page.$eval(SELECTORS.TITLE, (element) => element.textContent.split("|")[0]);
+    }
     const price = yield page.$eval(SELECTORS.PRICE, (element) => {
         const value = element.textContent.replace(/[^0-9,]/g, "").replace(/,/g, ".");
         return Number(value).toFixed(2);

@@ -75,7 +75,10 @@ export const handleDetail = async ({ request, page }: { request: Request, page: 
       .replace(/^(.*?)\s.*/, "$1")
       .trim();
    const typeAd: TypeAd = request.userData.typeAd;
-   const description: string = await page.$eval<string>(SELECTORS.DESCRIPTION, (element: Element) => element.textContent);
+   let description: string = await page.$eval<string>(SELECTORS.DESCRIPTION, (element: Element) => element.textContent);
+   if(description.length === 0) {
+      description = await page.$eval<string>(SELECTORS.TITLE, (element: Element) => element.textContent.split("|")[0]);
+   }
    const price: string = await page.$eval<string>(SELECTORS.PRICE, (element: Element) => {
       const value: string = element.textContent.replace(/[^0-9,]/g, "").replace(/,/g, ".");
       return Number(value).toFixed(2);
