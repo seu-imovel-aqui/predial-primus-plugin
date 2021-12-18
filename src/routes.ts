@@ -2,7 +2,7 @@ import { Request, RequestQueue } from "apify";
 import { sleep } from "apify/build/utils";
 import { Page } from "puppeteer";
 import { PAGE_TYPE, RENT_URL, SELL_URL } from "./constants";
-import { Ad, Address, Characteristic, Property, PropertyImage, State, TypeAd } from "@seu-imovel-aqui/plugin-types";
+import { Ad, Address, Characteristic, CharacteristicMain, Property, PropertyImage, State, TypeAd } from "@seu-imovel-aqui/plugin-types";
 
 const SELECTORS = {
    LINKS: "div > a[href^='/imovel']",
@@ -167,9 +167,39 @@ const getCharacteristics = async (page: Page): Promise<Characteristic[]> => {
          })
    ));
 
-   return characteristics;
+   return convertsToDefaultSeuImovelAqui(characteristics);
 };
 
 export const handlePage = async ({ request, page }: { request: Request, page: Page }) => {
    console.log("DEFAULT", request.url);
+};
+
+
+const convertsToDefaultSeuImovelAqui = (characteristics: Characteristic[]) => {
+   const characteristicsAux: Characteristic[] = [];
+   characteristics.forEach((characteristic: Characteristic) => {
+      if (characteristic.name === "de Área") {
+         characteristic.name = CharacteristicMain.AREA;
+      }
+
+      if (characteristic.name === "Banheiro(s)") {
+         characteristic.name = CharacteristicMain.BATHROOM;
+      }
+
+      if (characteristic.name === "Quarto(s)") {
+         characteristic.name = CharacteristicMain.BEDROOM;
+      }
+
+      if (characteristic.name === "Vaga de Garagem") {
+         characteristic.name = CharacteristicMain.PARKING_SPACE;
+      }
+
+      if (characteristic.name === "Suíte") {
+         characteristic.name = CharacteristicMain.SUITE;
+      }
+
+      characteristicsAux.push(characteristic);
+   });
+
+   return characteristicsAux;
 };

@@ -43,6 +43,7 @@ export class PredialPrimusPlugin implements Plugin {
                      default: return handlePage(context);
                   }
                },
+               navigationTimeoutSecs: 120
             });
 
             await crawler.run();

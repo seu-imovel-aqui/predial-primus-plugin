@@ -6,7 +6,7 @@
 	"types": "dist/index.d.ts",
 	"dependencies": {
 		"@seu-imovel-aqui/plugin": "^1.0.2",
-		"@seu-imovel-aqui/plugin-types": "^1.0.4",
+		"@seu-imovel-aqui/plugin-types": "^1.1.4",
 		"@types/node": "^16.11.0",
 		"@types/rimraf": "^3.0.2",
 		"apify": "^2.0.7",

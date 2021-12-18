@@ -138,9 +138,31 @@ const getCharacteristics = (page) => __awaiter(void 0, void 0, void 0, function*
             value: 1
         };
     })));
-    return characteristics;
+    return convertsToDefaultSeuImovelAqui(characteristics);
 });
 const handlePage = ({ request, page }) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("DEFAULT", request.url);
 });
 exports.handlePage = handlePage;
+const convertsToDefaultSeuImovelAqui = (characteristics) => {
+    const characteristicsAux = [];
+    characteristics.forEach((characteristic) => {
+        if (characteristic.name === "de Área") {
+            characteristic.name = plugin_types_1.CharacteristicMain.AREA;
+        }
+        if (characteristic.name === "Banheiro(s)") {
+            characteristic.name = plugin_types_1.CharacteristicMain.BATHROOM;
+        }
+        if (characteristic.name === "Quarto(s)") {
+            characteristic.name = plugin_types_1.CharacteristicMain.BEDROOM;
+        }
+        if (characteristic.name === "Vaga de Garagem") {
+            characteristic.name = plugin_types_1.CharacteristicMain.PARKING_SPACE;
+        }
+        if (characteristic.name === "Suíte") {
+            characteristic.name = plugin_types_1.CharacteristicMain.SUITE;
+        }
+        characteristicsAux.push(characteristic);
+    });
+    return characteristicsAux;
+};

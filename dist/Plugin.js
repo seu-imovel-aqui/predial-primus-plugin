@@ -54,6 +54,7 @@ class PredialPrimusPlugin {
                             default: return (0, routes_1.handlePage)(context);
                         }
                     }),
+                    navigationTimeoutSecs: 120
                 });
                 yield crawler.run();
                 yield queue.drop();
