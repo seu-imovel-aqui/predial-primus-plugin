@@ -59,7 +59,7 @@ class PredialPrimusPlugin {
                                 }
                                 else {
                                     this.cont++;
-                                    if (indexToScraping > 0 && this.cont > indexToScraping) {
+                                    if (indexToScraping > 0 && this.cont >= indexToScraping) {
                                         return (0, routes_1.handleDetail)(context).then((ad) => {
                                             this.stackData.push(ad);
                                         });

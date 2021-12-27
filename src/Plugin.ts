@@ -48,7 +48,7 @@ export class PredialPrimusPlugin implements Plugin {
                            // import in parts
                         } else {
                            this.cont++;
-                           if(indexToScraping > 0 && this.cont > indexToScraping) {
+                           if(indexToScraping > 0 && this.cont >= indexToScraping) {
                               return handleDetail(context).then((ad: Ad) => {
                                  this.stackData.push(ad);
                               });
