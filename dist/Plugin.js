@@ -21,8 +21,9 @@ const rimraf_1 = __importDefault(require("rimraf"));
 class PredialPrimusPlugin {
     constructor() {
         this.stackData = [];
+        this.cont = 0;
     }
-    executeScraping() {
+    executeScraping(indexToScraping = 0) {
         return new Promise((resolve, reject) => {
             (() => __awaiter(this, void 0, void 0, function* () {
                 const queue = yield apify_1.default.openRequestQueue();
@@ -46,11 +47,25 @@ class PredialPrimusPlugin {
                     handlePageFunction: (context) => __awaiter(this, void 0, void 0, function* () {
                         const label = context.request.userData.label || constants_1.PAGE_TYPE.PAGINATION;
                         switch (label) {
-                            case constants_1.PAGE_TYPE.PAGINATION: return (0, routes_1.handlePagination)(queue, context);
+                            case constants_1.PAGE_TYPE.PAGINATION:
+                                return (0, routes_1.handlePagination)(queue, context);
                             case constants_1.PAGE_TYPE.DETAIL:
-                                return (0, routes_1.handleDetail)(context).then((ad) => {
-                                    this.stackData.push(ad);
-                                });
+                                // full import
+                                if (indexToScraping == 0) {
+                                    return (0, routes_1.handleDetail)(context).then((ad) => {
+                                        this.stackData.push(ad);
+                                    });
+                                    // import in parts
+                                }
+                                else {
+                                    this.cont++;
+                                    if (indexToScraping > 0 && this.cont > indexToScraping) {
+                                        return (0, routes_1.handleDetail)(context).then((ad) => {
+                                            this.stackData.push(ad);
+                                        });
+                                    }
+                                }
+                                break;
                             default: return (0, routes_1.handlePage)(context);
                         }
                     }),

@@ -7,8 +7,9 @@ import rimraf from "rimraf";
 
 export class PredialPrimusPlugin implements Plugin {
    private stackData: Ad[] = [];
+   private cont = 0;
 
-   executeScraping() {
+   executeScraping(indexToScraping = 0) {
       return new Promise<Ad[]>((resolve, reject) => {
          (async () => {
             const queue = await Apify.openRequestQueue();
@@ -35,11 +36,25 @@ export class PredialPrimusPlugin implements Plugin {
                handlePageFunction: async (context) => {
                   const label: PAGE_TYPE = context.request.userData.label || PAGE_TYPE.PAGINATION;
                   switch(label) {
-                     case PAGE_TYPE.PAGINATION: return handlePagination(queue, context);
+                     case PAGE_TYPE.PAGINATION:
+                        return handlePagination(queue, context);
                      case PAGE_TYPE.DETAIL:
-                        return handleDetail(context).then((ad: Ad) => {
-                           this.stackData.push(ad);
-                        });
+                        // full import
+                        if(indexToScraping == 0) {
+                           return handleDetail(context).then((ad: Ad) => {
+                              this.stackData.push(ad);
+                           });
+
+                           // import in parts
+                        } else {
+                           this.cont++;
+                           if(indexToScraping > 0 && this.cont > indexToScraping) {
+                              return handleDetail(context).then((ad: Ad) => {
+                                 this.stackData.push(ad);
+                              });
+                           }
+                        }
+                        break;
                      default: return handlePage(context);
                   }
                },
