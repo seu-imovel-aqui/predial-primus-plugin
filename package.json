@@ -1,6 +1,6 @@
 {
 	"name": "@seu-imovel-aqui/predial-primus-plugin",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Plugin for Predial Primus realState scraping",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
