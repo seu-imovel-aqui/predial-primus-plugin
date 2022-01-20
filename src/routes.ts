@@ -100,11 +100,8 @@ export const handleDetail = async ({ request, page }: { request: Request, page: 
             })
          ));
       })
-      .catch(() => {
-         images.push({
-            alt: "not found",
-            link: "not found"
-         } as PropertyImage);
+      .catch((e: Error) => {
+         console.log(e.message);
       });
 
    const ad: Ad = {

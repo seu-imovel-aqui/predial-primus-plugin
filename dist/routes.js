@@ -88,11 +88,8 @@ const handleDetail = ({ request, page }) => __awaiter(void 0, void 0, void 0, fu
             };
         })));
     }))
-        .catch(() => {
-        images.push({
-            alt: "not found",
-            link: "not found"
-        });
+        .catch((e) => {
+        console.log(e.message);
     });
     const ad = {
         price,
